@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# IDE folders
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Django collected static files
+staticfiles/
+
+# Database
+db.sqlite3
+
+# Python cache
+.pytest_cache/
+
+# macOS
+.DS_Store
+
+# Vercel
+.vercel
