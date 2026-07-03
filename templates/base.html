@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Crypto Text{% endblock %} | NEXUS Cybersecurity</title>
+    <meta name="description" content="Enterprise-grade text encryption and decryption powered by AI. Protect your sensitive communications with military-grade cryptography.">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-wrapper">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar fade-in" id="sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'dashboard' %}" class="brand-logo">
+                    <i class="fa-solid fa-shield-halved"></i> <span>NEXUS</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <div class="menu-label">Command</div>
+                <a href="{% url 'dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </a>
+                
+                <div class="menu-label">Cryptography</div>
+                <a href="{% url 'encrypt' %}" class="menu-item {% if request.resolver_match.url_name == 'encrypt' %}active{% endif %}">
+                    <i class="fa-solid fa-lock"></i> Encrypt Text
+                </a>
+                <a href="{% url 'decrypt' %}" class="menu-item {% if request.resolver_match.url_name == 'decrypt' %}active{% endif %}">
+                    <i class="fa-solid fa-brain"></i> AI Decrypt
+                </a>
+                <a href="{% url 'message_history' %}" class="menu-item {% if request.resolver_match.url_name == 'message_history' %}active{% endif %}">
+                    <i class="fa-solid fa-clock-rotate-left"></i> History Log
+                </a>
+                
+                <div class="menu-label">Sec Tools</div>
+                <a href="{% url 'password_generator' %}" class="menu-item {% if request.resolver_match.url_name == 'password_generator' %}active{% endif %}">
+                    <i class="fa-solid fa-key"></i> Key Generator
+                </a>
+                <a href="{% url 'security_center' %}" class="menu-item {% if request.resolver_match.url_name == 'security_center' %}active{% endif %}">
+                    <i class="fa-solid fa-shield-virus"></i> Threat Center
+                </a>
+                
+                <div class="menu-label">Account</div>
+                <a href="{% url 'profile' %}" class="menu-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                    <i class="fa-solid fa-user-gear"></i> Profile
+                </a>
+                <form action="{% url 'logout' %}" method="post" style="margin-top: auto;">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-item" style="color: var(--danger); width: 100%; border: none; background: transparent; text-align: left; cursor: pointer; font-size: 14px;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Disconnect
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="navbar fade-in delay-100">
+                <div class="nav-left">
+                    <button id="sidebar-toggle" class="btn btn-ghost" style="display: none;">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                
+                <div class="nav-right">
+                    <!-- Connection status -->
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span style="color: var(--success); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: 'Orbitron', sans-serif;">Secure</span>
+                    </div>
+
+                    <!-- ── Futuristic Theme Toggle ── -->
+                    <button id="theme-toggle" class="theme-toggle-btn" title="Toggle dark / light mode" aria-label="Toggle theme">
+                        <span class="toggle-icons">
+                            <i class="fa-solid fa-sun sun-icon"></i>
+                            <i class="fa-solid fa-moon moon-icon"></i>
+                        </span>
+                    </button>
+                    
+                    <!-- User avatar -->
+                    <div class="user-profile">
+                        <div class="avatar">
+                            {{ request.user.username.0|upper }}
+                        </div>
+                        <span style="font-size: 13px; font-weight: 600; letter-spacing: 0.3px;">{{ request.user.first_name|default:request.user.username }}</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="content-wrapper">
+                {% if messages %}
+                <div class="messages-container" style="margin-bottom: 24px;">
+                    {% for message in messages %}
+                    <div class="glass-card fade-in" style="margin-bottom: 12px; border-left: 3px solid {% if message.tags == 'error' %}var(--danger){% elif message.tags == 'success' %}var(--neon-emerald){% else %}var(--neon-cyan){% endif %}; display: flex; align-items: center; gap: 12px; padding: 14px 18px;">
+                        {% if message.tags == 'success' %}
+                        <i class="fa-solid fa-circle-check" style="color: var(--success); font-size: 18px;"></i>
+                        {% elif message.tags == 'error' %}
+                        <i class="fa-solid fa-circle-exclamation" style="color: var(--danger); font-size: 18px;"></i>
+                        {% else %}
+                        <i class="fa-solid fa-circle-info" style="color: var(--neon-cyan); font-size: 18px;"></i>
+                        {% endif %}
+                        <span style="font-size: 14px; color: var(--text-primary);">{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% block content %}
+                <!-- Dynamic Content Goes Here -->
+                {% endblock %}
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Main JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    <script>
+        // ── Sidebar mobile toggle ──────────────────────────────────────────
+        if (window.innerWidth <= 992) {
+            document.getElementById('sidebar-toggle').style.display = 'block';
+        }
+        document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        // ── Dark / Light Theme Toggle ──────────────────────────────────────
+        const html      = document.documentElement;
+        const toggleBtn = document.getElementById('theme-toggle');
+
+        // Restore persisted preference
+        const savedTheme = localStorage.getItem('cryptotext-theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+
+        toggleBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            
+            // Add transition class for smooth body transition
+            document.body.style.transition = 'all 0.5s ease';
+            
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('cryptotext-theme', next);
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

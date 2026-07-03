@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# IDE folders
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Django collected static files
+staticfiles/
+
+# Python cache
+.pytest_cache/
+
+# macOS
+.DS_Store

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Encrypt Data{% endblock %}
+
+{% block content %}
+<div class="page-header fade-in">
+    <div>
+        <h1 class="page-title">
+            <i class="fa-solid fa-lock" style="color: var(--neon-cyan); font-size: 22px;"></i>
+            Encrypt Sensitive Data
+        </h1>
+        <p class="page-subtitle">Transform plain text into military-grade cipher output.</p>
+    </div>
+</div>
+
+<div class="grid-2 fade-in delay-100">
+    
+    <!-- Input Section -->
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-keyboard" style="color: var(--primary-purple);"></i> Plain Text Input
+            </h3>
+            <span class="badge badge-success"><i class="fa-solid fa-circle" style="font-size: 6px;"></i> Ready</span>
+        </div>
+        
+        <form action="{% url 'encrypt' %}" method="POST">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="alert-box alert-danger">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert-box alert-danger">
+                <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <textarea class="form-control" name="{{ form.raw_text.name }}" placeholder="Enter the text you wish to securely encrypt..." style="height: 250px; font-size: 15px;">{{ form.raw_text.value|default:'' }}</textarea>
+                {% if form.raw_text.errors %}<p style="color:var(--danger); font-size:12px;">{{ form.raw_text.errors.0 }}</p>{% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Encryption Key (Optional)</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-key" style="position: absolute; left: 16px; top: 16px; color: var(--text-muted);"></i>
+                    <input type="password" name="{{ form.encryption_key.name }}" class="form-control" placeholder="Leave blank for auto-generated key" style="padding-left: 44px;">
+                </div>
+                {% if form.encryption_key.errors %}<p style="color:var(--danger); font-size:12px;">{{ form.encryption_key.errors.0 }}</p>{% endif %}
+                
+                {% if generated_key %}
+                <div style="margin-top: 10px; padding: 12px 14px; background: rgba(6, 182, 212, 0.06); border: 1px dashed var(--neon-cyan); border-radius: 8px;">
+                    <p style="font-size: 11px; color: var(--neon-cyan); margin-bottom: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Auto-generated Key:</p>
+                    <code style="color: var(--text-primary); font-size: 14px; letter-spacing: 1px; font-family: 'Fira Code', monospace;">{{ generated_key }}</code>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;"><i class="fa-solid fa-triangle-exclamation" style="color: var(--warning);"></i> Save this key! Required for decryption.</p>
+                </div>
+                {% endif %}
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">If provided, you must remember this key to decrypt.</p>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 15px; padding: 14px;">
+                <i class="fa-solid fa-lock"></i> Execute Encryption
+            </button>
+            
+        </form>
+    </div>
+
+    <!-- Output Section -->
+    <div class="glass-card" style="border-color: rgba(6, 182, 212, 0.15);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-file-shield" style="color: var(--neon-cyan);"></i> Cipher Output
+            </h3>
+            
+            {% if encrypted_text %}
+            <button class="btn btn-outline copy-trigger" data-clipboard-target="#cipher-result" style="padding: 6px 14px; font-size: 13px;">
+                <i class="fa-solid fa-copy"></i> Copy
+            </button>
+            {% endif %}
+        </div>
+
+        <div class="form-group" style="height: calc(100% - 60px);">
+            <textarea id="cipher-result" class="form-control cipher-input" readonly placeholder="Awaiting input..." style="height: 100%; resize: none;">{{ encrypted_text|default:'' }}</textarea>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Security Note -->
+<div class="glass-card fade-in delay-200" style="margin-top: 24px; display: flex; align-items: flex-start; gap: 16px;">
+    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <i class="fa-solid fa-info" style="color: var(--neon-cyan);"></i>
+    </div>
+    <div>
+        <h4 style="font-size: 14px; margin-bottom: 4px; color: var(--text-primary);">Algorithm Status: <span style="color: var(--success);">Active</span></h4>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Texts are secured using multi-layered encryption. Generated keys are irretrievable if lost — store them securely.</p>
+    </div>
+</div>
+
+{% endblock %}

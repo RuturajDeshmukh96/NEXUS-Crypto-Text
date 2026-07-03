@@ -1,0 +1,336 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Crypto Text | Enterprise-Grade Text Encryption</title>
+    <meta name="description" content="Military-grade text encryption powered by AI analysis. Protect your sensitive communications with NEXUS cryptographic technology.">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- UI Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 850px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 60px;
+            font-weight: 900;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            letter-spacing: -2px;
+            line-height: 1.05;
+            font-family: 'Orbitron', 'Outfit', sans-serif;
+        }
+
+        .hero-title .gradient-text {
+            background: var(--holo-gradient);
+            background-size: 200% 200%;
+            animation: holoShift 4s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 620px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.75;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cipher-bg-anim {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cipher-bg-anim div {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            color: var(--neon-cyan);
+            font-size: 13px;
+            opacity: 0.12;
+            animation: floatText 20s linear infinite;
+        }
+
+        /* Animated orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orb-1 {
+            width: 400px; height: 400px;
+            background: rgba(99, 102, 241, 0.15);
+            top: -100px; right: -100px;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 300px; height: 300px;
+            background: rgba(6, 182, 212, 0.12);
+            bottom: -80px; left: -80px;
+            animation: orbFloat 10s ease-in-out infinite reverse;
+        }
+        .orb-3 {
+            width: 200px; height: 200px;
+            background: rgba(236, 72, 153, 0.1);
+            top: 40%; left: 50%;
+            animation: orbFloat 12s ease-in-out infinite;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        @keyframes floatText {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-100px) rotate(8deg); opacity: 0; }
+        }
+
+        /* Landing nav */
+        .landing-nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: var(--navbar-bg);
+            backdrop-filter: var(--glass-blur) var(--glass-saturate);
+            -webkit-backdrop-filter: var(--glass-blur) var(--glass-saturate);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.5s ease;
+        }
+
+        /* Feature section */
+        .features-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card {
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            background: var(--surface-color);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--holo-gradient);
+            background-size: 200% 200%;
+            animation: holoShift 4s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: var(--glow-primary);
+        }
+
+        .feature-card:hover::before { opacity: 1; }
+
+        .section-title {
+            font-family: 'Orbitron', 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        /* Landing theme toggle */
+        .landing-theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--surface-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.35s ease;
+        }
+        .landing-theme-toggle:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: var(--glow-neon);
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 36px; }
+            .landing-nav { padding: 16px 20px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="landing-nav">
+        <a href="{% url 'landing' %}" class="brand-logo" style="text-decoration: none; color: var(--text-primary); font-family: 'Orbitron', sans-serif;">
+            <i class="fa-solid fa-shield-halved" style="color: var(--neon-cyan); filter: drop-shadow(0 0 6px rgba(6,182,212,0.4));"></i> NEXUS
+        </a>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button id="landing-theme-toggle" class="landing-theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+                <i class="fa-solid fa-moon" id="landing-theme-icon"></i>
+            </button>
+            <a href="{% url 'login' %}" class="btn btn-ghost" style="color: var(--text-primary); font-size: 14px;">Sign In</a>
+            <a href="{% url 'register' %}" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px; border-radius: 30px;">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Animated orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="cipher-bg-anim">
+        <div style="left: 8%; animation-delay: 0s;">0xA9F2::ENCRYPT</div>
+        <div style="left: 22%; animation-delay: 3s;">SHA-256::VERIFY</div>
+        <div style="left: 45%; animation-delay: 1.5s;">AES-128::LOCK</div>
+        <div style="left: 65%; animation-delay: 5s;">0xE8D1::CIPHER</div>
+        <div style="left: 82%; animation-delay: 2.5s;">RSA-4096::SEAL</div>
+        <div style="left: 15%; animation-delay: 7s;">HMAC::VALIDATE</div>
+        <div style="left: 55%; animation-delay: 4s;">0xB1C4::DECODE</div>
+        <div style="left: 90%; animation-delay: 6s;">NEXUS::ACTIVE</div>
+    </div>
+
+    <section class="hero-section">
+        <div class="hero-content fade-in delay-100">
+            <div class="glass-card" style="display: inline-block; padding: 8px 20px; border-radius: 24px; margin-bottom: 28px; background: rgba(6, 182, 212, 0.08); border-color: rgba(6, 182, 212, 0.25);">
+                <span style="color: var(--neon-cyan); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-family: 'Orbitron', sans-serif;">
+                    <i class="fa-solid fa-lock"></i> Military-Grade Encryption
+                </span>
+            </div>
+            
+            <h1 class="hero-title">
+                Secure Your Data<br>
+                <span class="gradient-text">From Unauthorized Access</span>
+            </h1>
+            
+            <p class="hero-subtitle">Next-generation cipher technology with AI-powered analysis. Keep your sensitive communications unreadable to anyone without authorization.</p>
+            
+            <div class="hero-actions">
+                <a href="{% url 'register' %}" class="btn btn-primary" style="padding: 16px 36px; font-size: 16px; border-radius: 30px;">
+                    Initialize Encryption <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="{% url 'login' %}" class="btn btn-outline" style="padding: 16px 36px; font-size: 16px; border-radius: 30px;">
+                    Access Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section fade-in delay-200" style="padding: 100px 20px; max-width: 1200px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 64px;">
+            <h2 class="section-title" style="color: var(--text-primary);">Total Cryptographic Control</h2>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 16px;">Advanced security toolkit designed for the modern threat landscape.</p>
+        </div>
+
+        <div class="grid-3" style="gap: 28px;">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <div style="width: 72px; height: 72px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--primary-purple); font-size: 28px;">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3 style="font-size: 22px; margin-bottom: 14px; font-weight: 700;">Text Encryption</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.7;">Transform readable data into secure, scrambled ciphertext. Military-grade protection for your most confidential information.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <div style="width: 72px; height: 72px; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--neon-cyan); font-size: 28px;">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 style="font-size: 22px; margin-bottom: 14px; font-weight: 700;">AI Decryption</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.7;">Decrypt and analyse content instantly with Gemini AI. Get sentiment analysis, threat detection, and content summaries.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <div style="width: 72px; height: 72px; background: rgba(236, 72, 153, 0.08); border: 1px solid rgba(236, 72, 153, 0.2); border-radius: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--neon-magenta); font-size: 28px;">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <h3 style="font-size: 22px; margin-bottom: 14px; font-weight: 700;">Key Generator</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.7;">Synthesize uncrackable passphrases locally. Ensure your AES encryption strings remain mathematically impenetrable.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Landing page theme toggle
+        const html = document.documentElement;
+        const toggleBtn = document.getElementById('landing-theme-toggle');
+        const themeIcon = document.getElementById('landing-theme-icon');
+
+        const savedTheme = localStorage.getItem('cryptotext-theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        toggleBtn.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('cryptotext-theme', next);
+            updateIcon(next);
+        });
+
+        function updateIcon(theme) {
+            themeIcon.className = theme === 'dark'
+                ? 'fa-solid fa-sun'
+                : 'fa-solid fa-moon';
+        }
+    </script>
+
+</body>
+</html>

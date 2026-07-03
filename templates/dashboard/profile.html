@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile Setup{% endblock %}
+
+{% block content %}
+<div class="page-header fade-in">
+    <div>
+        <h1 class="page-title">
+            <i class="fa-solid fa-user-gear" style="color: var(--neon-cyan); font-size: 22px;"></i>
+            Operator Profile
+        </h1>
+        <p class="page-subtitle">Manage account security configurations and credentials.</p>
+    </div>
+</div>
+
+<div class="grid-2 fade-in delay-100" style="grid-template-columns: 1fr 2fr;">
+    
+    <!-- Profile Summary -->
+    <div class="glass-card" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <div class="avatar" style="width: 100px; height: 100px; font-size: 40px; margin-bottom: 20px; box-shadow: var(--glow-primary);">
+            {{ request.user.username.0|upper }}
+        </div>
+        <h2 style="font-size: 20px; margin-bottom: 4px; font-weight: 700;">{{ request.user.first_name|default:request.user.username }}</h2>
+        <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 20px;">System Operator</p>
+        
+        <span class="badge badge-success" style="margin-bottom: 24px;"><i class="fa-solid fa-shield-halved"></i> Clearance Level 5</span>
+
+        <button class="btn btn-outline" style="width: 100%; margin-bottom: 12px; font-size: 13px;">Update Avatar</button>
+        <button class="btn btn-ghost" style="width: 100%; color: var(--danger); font-size: 13px;">Wipe Local Records</button>
+    </div>
+
+    <!-- Details Form -->
+    <div class="glass-card">
+        <h3 style="font-size: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; font-family: 'Orbitron', sans-serif;">Personal clearance credentials</h3>
+        
+        {% if messages %}
+        <div style="margin-bottom: 16px;">
+            {% for message in messages %}
+            <div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2); padding: 12px; border-radius: 8px; color: var(--neon-cyan); font-size: 14px; text-align: center;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form action="{% url 'profile' %}" method="POST">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="alert-box alert-danger">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="grid-2" style="gap: 16px;">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.first_name.id_for_label }}">First Name</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}<p style="color:var(--danger); font-size:12px;">{{ form.first_name.errors.0 }}</p>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.last_name.id_for_label }}">Last Name</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}<p style="color:var(--danger); font-size:12px;">{{ form.last_name.errors.0 }}</p>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="{{ form.email.id_for_label }}">Secure Email Address</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 16px; color: var(--text-muted);"></i>
+                    {{ form.email }}
+                </div>
+                <style>
+                    #{{ form.email.id_for_label }} { padding-left: 44px; }
+                </style>
+                {% if form.email.errors %}<p style="color:var(--danger); font-size:12px;">{{ form.email.errors.0 }}</p>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="{{ form.password.id_for_label }}">Current Master Password (required to save changes)</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-key" style="position: absolute; left: 16px; top: 16px; color: var(--text-muted);"></i>
+                    {{ form.password }}
+                </div>
+                <style>
+                    #{{ form.password.id_for_label }} { padding-left: 44px; }
+                </style>
+                {% if form.password.errors %}<p style="color:var(--danger); font-size:12px;">{{ form.password.errors.0 }}</p>{% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 8px;">
+                Save Changes <i class="fa-solid fa-floppy-disk"></i>
+            </button>
+        </form>
+
+        <h3 style="font-size: 16px; margin-top: 40px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; font-family: 'Orbitron', sans-serif;">Interface Preferences</h3>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px; background: rgba(8, 11, 20, 0.4); border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 16px;">
+            <div>
+                <h4 style="font-size: 14px; margin-bottom: 4px; font-weight: 600;">Privacy Shield Mode (Mask Sensitive Content)</h4>
+                <p style="font-size: 12px; color: var(--text-secondary);">Obscures cipher strings and raw text throughout the dashboard until explicitly hovered or requested.</p>
+            </div>
+            <!-- Pill Toggle -->
+            <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
+                <input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+                <span style="position: absolute; cursor: pointer; inset: 0; background-color: var(--surface-color); transition: .4s; border-radius: 24px; border: 1px solid var(--border-color);">
+                    <span style="position: absolute; content: ''; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: var(--text-muted); transition: .4s; border-radius: 50%;"></span>
+                </span>
+            </label>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

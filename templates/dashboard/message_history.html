@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}History Log{% endblock %}
+
+{% block content %}
+<div class="page-header fade-in">
+    <div>
+        <h1 class="page-title">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--neon-cyan); font-size: 22px;"></i>
+            History Log
+        </h1>
+        <p class="page-subtitle">Review all past cryptographic operations.</p>
+    </div>
+    
+    <div class="header-actions">
+        <div style="position: relative;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 16px; top: 12px; color: var(--text-muted);"></i>
+            <input type="text" class="form-control" placeholder="Search by cipher..." style="padding-left: 44px; width: 280px; border-radius: 30px; font-size: 13px;">
+        </div>
+    </div>
+</div>
+
+<div class="glass-card fade-in delay-100">
+    
+    <!-- Filters -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-outline" style="padding: 6px 16px; border-radius: 20px; font-size: 12px; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3);">All Operations</button>
+            <button class="btn btn-ghost" style="padding: 6px 16px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border-color);">Encryptions</button>
+            <button class="btn btn-ghost" style="padding: 6px 16px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border-color);">Decryptions</button>
+        </div>
+        
+        <div>
+            <button class="btn btn-ghost" style="color: var(--danger); font-size: 12px;">
+                <i class="fa-solid fa-trash-can"></i> Clear History
+            </button>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">ID</th>
+                    <th style="text-align: left;">Operation</th>
+                    <th style="text-align: left;">Cipher Fragment</th>
+                    <th style="text-align: left;">Timestamp</th>
+                    <th style="text-align: left;">Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td style="font-family: 'Fira Code', monospace; font-size: 12px; color: var(--text-muted);">#{{ log.id }}</td>
+                    <td>
+                        {% if log.operation_type == 'ENCRYPT' %}
+                        <span class="badge badge-purple" style="background: rgba(99, 102, 241, 0.1); border: none;"><i class="fa-solid fa-lock"></i> Encrypt</span>
+                        {% else %}
+                        <span class="badge" style="background: rgba(6, 182, 212, 0.08); color: var(--neon-cyan); border: 1px solid rgba(6, 182, 212, 0.2);"><i class="fa-solid fa-unlock-keyhole"></i> Decrypt</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-family: 'Fira Code', monospace; font-size: 13px; color: var(--neon-cyan);">{{ log.text_fragment }}</td>
+                    <td style="font-size: 13px; color: var(--text-secondary);">{{ log.timestamp|date:"M d, Y H:i" }}</td>
+                    <td>
+                        {% if log.status == 'SUCCESS' %}
+                        <span class="badge badge-success">Success</span>
+                        {% else %}
+                        <span class="badge badge-danger">Failed</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        <span style="display: none;" id="cipher-full-{{ log.id }}">{{ log.full_cipher }}</span>
+                        <button class="btn btn-ghost copy-trigger" data-clipboard-target="#cipher-full-{{ log.id }}" style="padding: 6px 10px; border-radius: 8px;" title="Copy Full Cipher"><i class="fa-solid fa-copy"></i></button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 40px; text-align: center; color: var(--text-muted);">
+                        <i class="fa-solid fa-inbox" style="font-size: 28px; opacity: 0.3; display: block; margin-bottom: 10px;"></i>
+                        No operations recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-color);">
+        <p style="font-size: 12px; color: var(--text-muted); font-family: 'Fira Code', monospace;">{{ logs|length }} record(s) loaded</p>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-outline" style="padding: 6px 14px; font-size: 12px;" disabled>Previous</button>
+            <button class="btn btn-outline" style="padding: 6px 14px; font-size: 12px;">Next</button>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
