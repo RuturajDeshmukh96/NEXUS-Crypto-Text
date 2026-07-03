@@ -146,11 +146,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STORAGES = {
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+# Disable compressed manifest to prevent 500 errors if collectstatic doesn't run properly
 WHITENOISE_MANIFEST_STRICT = False
 
 LOGIN_URL = 'login'
