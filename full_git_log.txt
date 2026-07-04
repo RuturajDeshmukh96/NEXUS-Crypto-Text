@@ -1,0 +1,10 @@
+﻿3573dc4 fix: WSGI path and Static storage layout for Vercel
+6fbf39c fix: Configure project for Vercel deployment - Fix empty requirements.txt with all dependencies - Fix vercel.json to use builds instead of functions format - Add app=application alias in wsgi.py for Vercel runtime - Add whitenoise for static file serving - Add auto-migration on cold starts for ephemeral /tmp SQLite - Add CSRF_TRUSTED_ORIGINS for vercel.app - Add build_files.sh for deployment - Add proper .gitignore
+1894210 json change t
+7a7e3bf Recreated requirements.txt
+8b4d6ce Fix requirements encoding
+5affec7 update2
+1a70d96 update1
+6aa6473 update
+9278f0c Updated requirements for Render deployment
+85027c3 Initial commit
