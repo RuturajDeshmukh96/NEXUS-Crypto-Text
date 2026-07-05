@@ -1047,12 +1047,66 @@ td { padding: 16px 20px; }
 }
 
 @media (max-width: 768px) {
+  .sidebar { width: 240px; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  .content-wrapper { padding: 16px; }
-  .auth-card { padding: 28px; }
-  .page-header { flex-direction: column; align-items: flex-start; }
-  .ai-grid { grid-template-columns: 1fr; }
-  .ai-metric-full { grid-column: auto; }
-  .hero-title { font-size: 32px; }
-  .hero-subtitle { font-size: 16px; }
+  
+  /* Make content regions tighter */
+  .content-wrapper { padding: 12px; }
+  .auth-card { padding: 24px 20px; }
+  .glass-card { padding: 16px; }
+  .feature-card { padding: 24px 16px; }
+  
+  /* Reduce header spacing and text size */
+  .page-header { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 20px; }
+  .page-title { font-size: 22px; margin-bottom: 4px; }
+  .page-subtitle { font-size: 13px; }
+  .hero-title { font-size: 32px; margin-bottom: 16px; }
+  .hero-subtitle { font-size: 15px; margin-bottom: 20px; }
+  
+  /* Forms & Buttons tighter */
+  .form-group { margin-bottom: 16px; }
+  .form-control { padding: 10px 14px; font-size: 14px; }
+  .btn { padding: 10px 18px; font-size: 13px; }
+  
+  /* AI cards adjustments for compact layout */
+  .ai-grid { grid-template-columns: 1fr; gap: 10px; }
+  .ai-metric-full { grid-column: auto; padding: 12px; }
+  .ai-metric { padding: 12px; }
+  .ai-value { font-size: 18px; }
+  .ai-glow-icon { width: 36px; height: 36px; font-size: 16px; }
+  .ai-info-strip { padding: 10px 14px; font-size: 13px; gap: 8px; margin-bottom: 12px; }
+  .alert-box { padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
+}
+
+@media (max-width: 480px) {
+  /* Ultra-compact mode for small phones */
+  body { font-size: 13px; }
+  .content-wrapper { padding: 10px; }
+  .glass-card { padding: 14px; border-radius: 12px; }
+  
+  .navbar { height: 60px; padding: 0 10px; }
+  .status-indicator { padding: 6px 10px; }
+  .status-indicator span { display: none; } /* Hide text, keep dot */
+  .user-profile { padding: 4px; border-radius: 50%; border: none; background: transparent; }
+  .user-profile span { display: none; } /* Show only avatar */
+  .avatar { width: 32px; height: 32px; }
+  .theme-toggle-btn { width: 52px; height: 26px; }
+  .theme-toggle-btn::before { width: 18px; height: 18px; }
+  [data-theme="dark"] .theme-toggle-btn::before { left: calc(100% - 22px); }
+  .nav-right { gap: 8px; }
+
+  .hero-title { font-size: 26px; line-height: 1.1; }
+  .hero-subtitle { font-size: 14px; }
+  .page-title { font-size: 20px; }
+  .page-subtitle { font-size: 12px; }
+  .auth-card { padding: 20px 16px; }
+  .btn { padding: 8px 16px; font-size: 13px; width: 100%; justify-content: center; }
+  .hero-actions { flex-direction: column; width: 100%; gap: 12px; }
+  
+  .feature-icon, .stat-icon { width: 44px; height: 44px; font-size: 20px; }
+  .feature-card { padding: 16px 12px; }
+  
+  .ai-value { font-size: 16px; }
+  .ai-label { font-size: 9px; }
+  .ai-info-strip, .alert-box { font-size: 12px; padding: 8px 12px; }
 }
