@@ -104,7 +104,7 @@ class RegisterView(View):
                     last_name=form.cleaned_data['last_name']
                 )
                 UserProfile.objects.create(user=user, mobile_number=form.cleaned_data['mobile_number'])
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('dashboard')
             except Exception as e:
                 logger.error(f"Registration error: {e}")
