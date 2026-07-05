@@ -17,6 +17,8 @@
 </head>
 <body>
     <div class="app-wrapper">
+        <!-- Sidebar Overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
         
         <!-- Sidebar Navigation -->
         <aside class="sidebar fade-in" id="sidebar">
@@ -134,8 +136,19 @@
         if (window.innerWidth <= 992) {
             document.getElementById('sidebar-toggle').style.display = 'block';
         }
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
         document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('open');
+            sidebar.classList.toggle('open');
+            if(window.innerWidth <= 992) {
+                overlay.classList.toggle('active');
+            }
+        });
+        
+        overlay?.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
         });
 
         // ── Dark / Light Theme Toggle ──────────────────────────────────────

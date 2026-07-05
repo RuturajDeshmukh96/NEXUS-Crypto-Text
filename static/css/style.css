@@ -181,6 +181,22 @@ a:hover { color: var(--neon-cyan); }
 /* ── Layout ─────────────────────────────────────────────────────────────── */
 .app-wrapper { display: flex; min-height: 100vh; position: relative; z-index: 1; }
 
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 95;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-w);
