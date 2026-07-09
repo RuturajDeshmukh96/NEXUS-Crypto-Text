@@ -1058,8 +1058,8 @@ td { padding: 16px 20px; max-width: 250px; word-wrap: break-word; overflow-wrap:
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 992px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); box-shadow: 10px 0 40px rgba(0,0,0,0.3); }
+  .sidebar { transform: translateX(-100%) !important; }
+  .sidebar.open { transform: translateX(0) !important; box-shadow: 10px 0 40px rgba(0,0,0,0.3); }
   .main-content { margin-left: 0; width: 100%; }
   .grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
   .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
